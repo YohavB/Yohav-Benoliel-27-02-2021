@@ -1,17 +1,24 @@
+import axios from "axios";
+import { throttle } from "lodash";
 import React, { useEffect, useState } from "react";
 
-export default function SearchBar() {
+import { getWeatherData } from "../selectors/weatherData";
+import { setWeatherData } from "../actions/weatherData";
+import { getTownID } from "../selectors/townID";
+import { setTownID } from "../actions/townID";
+import { connect } from "react-redux";
+import { api } from "../api/api";
+
+function SearchBar(props) {
   const [query, setQuery] = useState("Tel Aviv");
   const [error, setError] = useState("");
-  const [autoCompletion, setAutoCompletion] = useState(data);
-  const [weatherData, setWeatherData] = useState(dailyWeather);
+  const [autoCompletion, setAutoCompletion] = useState();
 
   useEffect(() => {
     query && validateQuery();
-    // if (!error && query) {
-    //throttle(() => autocomplete(), 500)
-    //
-    // }
+    if (!error && query) {
+      throttle(() => autocomplete(), 500);
+    }
   }, [query]);
 
   const validateQuery = () => {
@@ -39,14 +46,14 @@ export default function SearchBar() {
     if (!error && query) {
       try {
         const res = axios.get(
-          `  ${api.base}/currentconditions/v1/${keyTown}?apikey=%09${api.key}`
+          `  ${api.base}/currentconditions/v1/${props.townID}?apikey=%09${api.key}`
         );
 
         console.log(res.data);
         console.log(res.status);
         console.log(res.statusText);
         if (res.status === 200) {
-          setWeatherData(res.data);
+          setWeatherData(res.data); // redux
         } else {
           setError("An Error has occured");
         }
@@ -70,7 +77,6 @@ export default function SearchBar() {
           value={query}
           type="text"
           className="search-bar"
-          // onKeyDown={handleKey}
           placeholder="Search for a Country/City/Town"
         />
 
@@ -83,8 +89,11 @@ export default function SearchBar() {
                   key={item.key}
                   onClick={() => {
                     selectOption(item.LocalizedName);
-                    setKeyTown(item.key);
-                    setLocation(item.LocalizedName, item.Country.LocalizedName);
+                    setTownID(item.key);
+                    props.setLocation(
+                      item.LocalizedName,
+                      item.Country.LocalizedName
+                    ); //redux
                   }}
                 >
                   {item.LocalizedName}, {item.Country.LocalizedName}
@@ -97,3 +106,17 @@ export default function SearchBar() {
     </div>
   );
 }
+
+const mapStateToProps = (state) => {
+  return {
+    townID: getTownID(state),
+    weatherData: getWeatherData(state),
+  };
+};
+
+const mapDispatchToProps = {
+  setWeatherData,
+  setTownID,
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(SearchBar);

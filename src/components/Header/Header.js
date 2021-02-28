@@ -1,10 +1,8 @@
-import React, { useState } from "react";
-import { useSelector } from "react-redux";
+import React from "react";
 import { NavLink } from "react-router-dom";
-import ToggleUnit from "../../Toggle/ToggleUnit";
+import ToggleUnit from "../Toggle/ToggleUnit";
 
 export default function Header(props) {
-
   return (
     <div className="header">
       <div className="header-title">HEADER</div>

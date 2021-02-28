@@ -1,13 +1,9 @@
 import React from "react";
-import { useSelector, useDispatch } from "react-redux";
+import { useDispatch, connect } from "react-redux";
 import { setUnit } from "../actions/units";
 import { setTheme } from "../actions/theme";
 
 const ToggleUnit = (props) => {
-  const counter = useSelector((state) => state.counter);
-  const metric = useSelector((state) => state.unit);
-  const darktheme = useSelector((state) => state.theme);
-
   const dispatch = useDispatch();
 
   return (
@@ -33,4 +29,9 @@ const ToggleUnit = (props) => {
   );
 };
 
-export default ToggleUnit;
+const mapDispatchToProps = {
+  setUnit,
+  setTheme,
+};
+
+export default connect(mapDispatchToProps)(ToggleUnit);

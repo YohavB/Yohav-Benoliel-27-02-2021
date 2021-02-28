@@ -1,16 +1,17 @@
-import React from "react";
+import axios from "axios";
+import React, { useState } from "react";
 import Moment from "react-moment";
 import "./Forecast.css";
 
-export default function Forecast() {
+import { api } from "../api/api";
 
-  const [forecastData, setforecastData] = useState(dailyForecast);
+export default function Forecast(props) {
+  const [forecastData, setforecastData] = useState([]);
 
-  
   async function getForecast() {
     try {
       const res = axios.get(
-        `  ${api.base}/forecasts/v1/daily/5day/${keyTown}?apikey=%09${api.key}&metric=${metric}`
+        `  ${api.base}/forecasts/v1/daily/5day/${props.townID}?apikey=%09${api.key}&metric=${props.metric}`// get from redux
       );
 
       console.log(res.data);
@@ -19,7 +20,6 @@ export default function Forecast() {
       setforecastData(res.data);
     } catch (e) {}
   }
-
 
   return (
     <div className="forecast">
