@@ -1,4 +1,4 @@
-import { SET_THEME } from "../actions/theme";
+import { SET_THEME } from "../actions/settings";
 
 const initialState = {
   theme: false,

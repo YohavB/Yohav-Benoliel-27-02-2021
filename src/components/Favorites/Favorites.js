@@ -1,5 +1,5 @@
-import React, { useEffect, useState } from "react";
-import { getFavorites } from "../selectors/favorites";
+import React, { useState } from "react";
+import { getFavorites } from "../selectors/data";
 import { connect, useSelector } from "react-redux";
 import FavoriteCard from "../FavoriteCard/FavoriteCard";
 
@@ -7,8 +7,6 @@ function Favorites(props) {
   const [favoritesTown, setFavoritesTown] = useState(
     useSelector((state) => state.favorites)
   );
-
- 
 
   // async componentDidMount() {
   //     const {favorites} = props
@@ -22,10 +20,6 @@ function Favorites(props) {
   //     }
   //     setFavoritesTown({favorites})
   // }
-
-  
-
-
 
   return (
     <div>

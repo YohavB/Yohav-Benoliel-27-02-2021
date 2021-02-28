@@ -1,4 +1,4 @@
-import { SET_UNIT } from "../actions/units";
+import { SET_UNIT } from "../actions/settings";
 
 const initialState = {
   unit: true,

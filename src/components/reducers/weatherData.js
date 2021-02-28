@@ -1,4 +1,4 @@
-import { SET_WEATHER_DATA } from "../actions/weatherData";
+import { SET_WEATHER_DATA } from "../actions/data";
 
 const initialState = {
     weatherData: [],

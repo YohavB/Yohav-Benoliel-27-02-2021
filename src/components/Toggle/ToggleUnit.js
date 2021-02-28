@@ -1,16 +1,16 @@
 import React from "react";
 import { connect } from "react-redux";
-import { setUnit } from "../actions/units";
-import { setTheme } from "../actions/theme";
+import { setUnit } from "../actions/settings";
+import { setTheme } from "../actions/settings";
 
 const ToggleUnit = (props) => {
   return (
     <div className="toggle-wrapper">
-      <button onClick={() => setUnit}>+</button>
+      <button onClick={props.setUnit}>+</button>
       <div className="toggle-text">
         Cel
         <label className="switch">
-          <input type="checkbox" onChange={() => setUnit} />
+          <input type="checkbox" onChange={props.setUnit} />
           <span className="slider"></span>
         </label>
         Far
@@ -18,7 +18,7 @@ const ToggleUnit = (props) => {
       <div className="toggle-text">
         Day
         <label className="switch">
-          <input type="checkbox" onChange={() => setTheme} />
+          <input type="checkbox" onChange={props.setTheme} />
           <span className="slider dark"></span>
         </label>
         Night

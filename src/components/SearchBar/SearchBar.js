@@ -2,9 +2,9 @@ import axios from "axios";
 import { throttle } from "lodash";
 import React, { useEffect, useState } from "react";
 
-import { setWeatherData } from "../actions/weatherData";
-import { getTownID } from "../selectors/townID";
-import { setTownID } from "../actions/townID";
+import { setWeatherData } from "../actions/data";
+import { getTownID } from "../selectors/data";
+import { setTownID } from "../actions/data";
 import { connect } from "react-redux";
 import { api } from "../api/api";
 
@@ -44,7 +44,7 @@ function SearchBar(props) {
   async function getCurrentWeather() {
     if (!error && query) {
       try {
-        const res = axios.get(
+        const res = await axios.get(
           `  ${api.base}/currentconditions/v1/${props.townID}?apikey=%09${api.key}`
         );
 

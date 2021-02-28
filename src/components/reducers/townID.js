@@ -1,4 +1,4 @@
-import { SET_TOWNID } from "../actions/townID";
+import { SET_TOWNID } from "../actions/data";
 
 const initialState = {
   townID: "",

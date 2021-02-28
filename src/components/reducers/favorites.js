@@ -1,4 +1,4 @@
-import { SET_FAVORITE, REMOVE_FAVORITE } from "../actions/favorites";
+import { SET_FAVORITE, REMOVE_FAVORITE } from "../actions/data";
 
 const initialState = {
   favorites: [],

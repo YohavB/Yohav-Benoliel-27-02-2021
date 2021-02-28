@@ -10,9 +10,9 @@ export default function Forecast(props) {
 
   async function getForecast() {
     try {
-      const res = axios.get(
-        `  ${api.base}/forecasts/v1/daily/5day/${props.townID}?apikey=%09${api.key}&metric=${props.metric}`// get from redux
-      ); // TODO manque le await
+      const res = await axios.get(
+        `  ${api.base}/forecasts/v1/daily/5day/${props.townID}?apikey=%09${api.key}&metric=${props.metric}`
+      ); // DONE manque le await
 
       console.log(res.data);
       console.log(res.status);

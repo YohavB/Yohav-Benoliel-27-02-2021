@@ -2,7 +2,7 @@ import axios from "axios";
 import React, { useEffect, useState } from "react";
 import Moment from "react-moment";
 import { connect } from "react-redux";
-import { removeFavorite } from "../actions/favorites";
+import { removeFavorite } from "../actions/data";
 import { api } from "../api/api";
 
 function FavoriteCard(props) {

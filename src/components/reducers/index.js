@@ -2,14 +2,14 @@ import { combineReducers } from "redux";
 import unit from "./units";
 import favorites from "./favorites";
 import theme from "./theme";
-import counter from "./counter";
+import townID from "./townID";
 import weatherData from "./weatherData";
 
 const reducers = combineReducers({
   unit,
   favorites,
   theme,
-  counter,
+  townID,
   weatherData,
 });
 

@@ -6,9 +6,9 @@ import snow from "./assets/snow.jpg";
 import storm from "./assets/storm.jpg";
 import sun from "./assets/sun.jpg";
 
-import { getFavorites } from "./selectors/favorites";
-import { getWeatherData } from "./selectors/weatherData";
-import { setFavorite } from "./actions/favorites";
+import { getFavorites } from "./selectors/data";
+import { getWeatherData } from "./selectors/data";
+import { setFavorite } from "./actions/data";
 import { connect } from "react-redux";
 
 import Forecast from "./Forecast/Forecast";
@@ -18,7 +18,7 @@ import SearchBar from "./SearchBar/SearchBar";
 function Home(props) {
   const [location, setLocation] = useState("");
   const [mainBg, setMainBg] = useState(clear);
-  const weatherNo = props.getWeatherData.WeatherIcon; //  c pour recup le number donne par lAPI pour changer le bg
+  const weatherNo = props.getWeatherData; //  c pour recup le number donne par lAPI pour changer le bg
 
   useEffect(() => {
     bgSwitch();
@@ -37,7 +37,8 @@ function Home(props) {
     }
   };
 
-  const bgSwitch = () => { // if done
+  const bgSwitch = () => {
+    // if done
     if (weatherNo < 5) {
       setMainBg(sun);
     } else if (weatherNo < 11) {
