@@ -1,38 +1,315 @@
+::-webkit-scrollbar {
+  display: none;
+}
+
 .App {
+  height: 100%;
   text-align: center;
 }
 
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
+a {
+  color: inherit;
+  text-decoration: inherit;
 }
 
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
-  }
+.header {
+  height: 80px;
+  border: 2px solid black;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
 }
 
-.App-header {
-  background-color: #282c34;
-  min-height: 100vh;
+.header-title {
+  display: flex;
+  padding-left: 10px;
+}
+
+.navlink {
+  border: 1px solid red;
+  width: 150px;
+  display: flex;
+  justify-content: space-around;
+  flex-direction: row;
+
+  flex-wrap: wrap;
+}
+
+.active-tab {
+  font-weight: bold;
+}
+
+.main {
+  background: no-repeat center center fixed;
+  -webkit-background-size: cover;
+  -moz-background-size: cover;
+  -o-background-size: cover;
+  background-size: cover;
+}
+/* SEARCHBAR AND autoCompletion */
+
+.search-box {
   display: flex;
   flex-direction: column;
-  align-items: center;
   justify-content: center;
-  font-size: calc(10px + 2vmin);
-  color: white;
+  align-items: center;
+  position: relative;
 }
 
-.App-link {
-  color: #61dafb;
+.search-bar {
+  display: block;
+  width: 50%;
+  appearance: none;
+  background: none;
+  border: none;
+  outline: none;
+  background-color: rgba(255, 255, 255, 0.5);
+  border-radius: 0px 0px 16px 16px;
+  box-shadow: 0px 5px rgba(0, 0, 0, 0.2);
+  color: #313131;
+  font-size: 20px;
+  transition: 0.4s ease;
+  text-align: center;
 }
 
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
+.search-bar:focus {
+  background-color: rgba(255, 255, 255, 0.75);
+}
+
+.autocomp-options {
+  z-index: 2;
+  top: 110%;
+  position: absolute;
+  width: 40%;
+  background-color: rgba(255, 255, 255, 0.75);
+  display: none;
+}
+
+.autocomp-option {
+  border-top: 0.5px solid rgba(112, 112, 112, 0.5);
+  cursor: pointer;
+}
+
+:hover.autocomp-option {
+  background: rgba(112, 112, 122, 0.15);
+  z-index: 3;
+}
+
+.error {
+  width: fit-content;
+  border-radius: 10px;
+  padding: 0 10px 0 10px;
+  background: rgba(247, 16, 16, 0.5);
+  color: rgb(255, 0, 0);
+  margin: auto;
+  margin-top: 5px;
+}
+
+/* DAILY WEATHER DATA */
+
+.daily-wrapper {
+}
+
+.fav-btn {
+  border: 1px solid rgb(243, 124, 144);
+  position: absolute;
+  right: 10%;
+  margin-top: 10px;
+  cursor: pointer;
+}
+
+@media only screen and (max-width: 768px) {
+  .fav-btn {
+    right: 10px;
+    cursor: pointer;
+    background-color: violet;
   }
-  to {
-    transform: rotate(360deg);
-  }
+}
+.location {
+  color: #fff;
+  font-size: clamp(30px, 6vw, 70px);
+  font-weight: 500;
+  text-align: center;
+  text-shadow: 3px 3px rgba(50, 50, 70, 0.5);
+}
+
+.date {
+  color: #fff;
+  font-size: clamp(20px, 4vw, 60px);
+  font-weight: 300;
+  font-style: italic;
+  text-align: center;
+  text-shadow: 2px 2px rgba(50, 50, 70, 0.5);
+}
+
+.weather-box {
+  text-align: center;
+}
+
+.temp {
+  position: relative;
+  display: inline-block;
+  background-color: rgba(255, 255, 255, 0.2);
+  border-radius: 16px;
+  padding: 15px 25px;
+  color: #fff;
+  font-size: clamp(30px, 9vw, 70px);
+  font-weight: 900;
+
+  text-shadow: 3px 6px rgba(50, 50, 70, 0.5);
+  text-align: center;
+  box-shadow: rgba(0, 0, 0, 0.2);
+}
+
+.weather {
+  color: #fff;
+  font-size: clamp(20px, 7vw, 50px);
+  font-weight: 700;
+  text-shadow: 3px 3px rgba(50, 50, 70, 0.5);
+}
+
+/* FORECAST */
+
+.forecast {
+  display: flex;
+  justify-content: space-around;
+  flex-wrap: wrap;
+  color: #fff;
+  text-shadow: 2px 2px rgba(50, 50, 70, 0.5);
+  margin-top: 10px;
+}
+
+.forecast-card {
+  border: 2px solid rgba(255, 255, 255, 0.459);
+  border-radius: 3px;
+  height: 150px;
+  width: 130px;
+  overflow-x: inherit;
+  overflow-y: inherit;
+  margin-bottom: 10px;
+  overflow: hidden;
+}
+
+.forecast-date {
+  display: flex;
+  flex-wrap: wrap;
+  padding-top: 2px;
+}
+
+.forecast-temp {
+  display: flex;
+  justify-content: space-around;
+  padding: 2px;
+}
+
+.day-night {
+  display: flex;
+  justify-content: space-around;
+  background: no-repeat center center;
+  -webkit-background-size: cover;
+  -moz-background-size: cover;
+  -o-background-size: cover;
+  background-size: cover;
+  background-image: url("./components/assets/dayandnight.jpg");
+  height: 100%;
+  padding-top: 5px;
+}
+
+.day {
+  width: 50%;
+}
+.night {
+  width: 50%;
+}
+
+/*toggle button*/
+
+.toggle-wrapper {
+  border: 1px solid red;
+  width: 150px;
+}
+
+.toggle-text {
+  border: 1px solid blue;
+  display: flex;
+  justify-content: space-around;
+  align-content: center;
+  align-items: baseline;
+}
+
+.switch {
+  position: relative;
+  display: inline-block;
+  width: 30px;
+  height: 10px;
+
+}
+
+.switch input {
+  position: absolute;
+  width: 0;
+  height: 0;
+}
+
+.slider {
+  position: absolute;
+  cursor: pointer;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: #2196f3;
+  -webkit-transition: 0.4s;
+  transition: 0.4s;
+  border-radius: 34px;
+}
+
+.slider:before {
+  position: absolute;
+  content: "";
+  height: 9px;
+  width: 9px;
+  top: 0.5px;
+  left: 1px;
+  background-color: white;
+  -webkit-transition: 0.4s;
+  transition: 0.4s;
+  border-radius: 50%;
+}
+
+input:checked + .slider {
+  background-color: #2196f3;
+}
+
+input:focus + .slider {
+  box-shadow: 0 0 1px #2196f3;
+}
+
+input:checked + .slider:before {
+  -webkit-transform: translateX(19px);
+  -ms-transform: translateX(19px);
+  transform: translateX(19px);
+}
+
+.slider.dark{
+  background-color: #fff;
+  border: black 0.5px solid;
+
+}
+
+.slider.dark:before {
+  background-image: url(./components/assets/sun.svg);
+  background-color: transparent;
+  top: inherit;
+}
+
+input:checked + .slider.dark {
+  background-color: rgb(92, 90, 90);
+}
+
+input:checked + .slider.dark:before {
+  background-image: url(./components/assets/fullmoon.svg);
+  -webkit-transform: translateX(19px);
+  -ms-transform: translateX(19px);
+  transform: translateX(19px);
 }
