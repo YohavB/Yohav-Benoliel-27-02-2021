@@ -2,7 +2,6 @@ import axios from "axios";
 import { throttle } from "lodash";
 import React, { useEffect, useState } from "react";
 
-import { getWeatherData } from "../selectors/weatherData";
 import { setWeatherData } from "../actions/weatherData";
 import { getTownID } from "../selectors/townID";
 import { setTownID } from "../actions/townID";
@@ -12,12 +11,12 @@ import { api } from "../api/api";
 function SearchBar(props) {
   const [query, setQuery] = useState("Tel Aviv");
   const [error, setError] = useState("");
-  const [autoCompletion, setAutoCompletion] = useState();
+  const [autoCompletion, setAutoCompletion] = useState([]); // DONE manque default - ptetre [] t'as raison
 
   useEffect(() => {
     query && validateQuery();
     if (!error && query) {
-      throttle(() => autocomplete(), 500);
+      throttle(autocomplete, 500); // DONE throttle(autocomplete, 500); a la place
     }
   }, [query]);
 
@@ -25,7 +24,7 @@ function SearchBar(props) {
     if (!/^[a-zA-Z ]*$/i.test(query)) {
       setError("Sorry but only English letters are allowed !");
     } else {
-      setError("");
+      setError(""); // DONE pk besoin de else? pcw faut reset lerror si tout va bien
     }
   };
 
@@ -53,21 +52,29 @@ function SearchBar(props) {
         console.log(res.status);
         console.log(res.statusText);
         if (res.status === 200) {
-          setWeatherData(res.data); // redux
+          props.setWeatherData(res.data); // DONE celui des props, pas celui importé
         } else {
           setError("An Error has occured");
         }
-      } catch (e) {}
+      } catch (e) {
+        setError(`An Error has occured, ${e}`); // DONE met qqchose dans l erreur
+      }
     } else if (!error && !query) {
       setError("The Search Field is Empty!");
     }
     setQuery("");
   }
 
-  function selectOption(option) {
+  const selectOption = (option) => {
     setQuery(option);
     getCurrentWeather();
-  }
+  };
+
+  const onOptionClick = (item) => {
+    selectOption(item.LocalizedName);
+    props.setTownID(item.key); // DONE des props la pure de ta race
+    props.setLocation(item.LocalizedName, item.Country.LocalizedName);
+  };
 
   return (
     <div>
@@ -88,12 +95,7 @@ function SearchBar(props) {
                   className="autocomp-option"
                   key={item.key}
                   onClick={() => {
-                    selectOption(item.LocalizedName);
-                    setTownID(item.key);
-                    props.setLocation(
-                      item.LocalizedName,
-                      item.Country.LocalizedName
-                    ); //redux
+                    onOptionClick(item); // DONE sort ca dans une fonction
                   }}
                 >
                   {item.LocalizedName}, {item.Country.LocalizedName}
@@ -110,7 +112,6 @@ function SearchBar(props) {
 const mapStateToProps = (state) => {
   return {
     townID: getTownID(state),
-    weatherData: getWeatherData(state),
   };
 };
 

@@ -65,4 +65,4 @@ const mapDispatchToProps = {
   removeFavorite,
 };
 
-export default connect(mapDispatchToProps)(FavoriteCard);
+export default connect(null, mapDispatchToProps)(FavoriteCard);

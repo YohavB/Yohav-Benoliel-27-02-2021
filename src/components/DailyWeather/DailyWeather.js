@@ -28,7 +28,8 @@ function DailyWeather(props, location) {
   return (
     <div>
       <div className="daily-wrapper">
-        {getWeatherData.map((item) => {
+        {props.getWeatherData.map((item) => {
+          //  props.weatherData.map, pas getWeatherData DONE
           return (
             <div>
               <div className="location-box">
@@ -36,7 +37,9 @@ function DailyWeather(props, location) {
                   {" "}
                   <input
                     type="checkbox"
-                    checked={toggleFavorite}
+                    checked={
+                      toggleFavorite /* TODO c cense etre un boolean, pas une fonction || ?? */
+                    }
                     onChange={toggleFavorite}
                   />
                 </div>

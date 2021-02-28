@@ -1,18 +1,16 @@
 import React from "react";
-import { useDispatch, connect } from "react-redux";
+import { connect } from "react-redux";
 import { setUnit } from "../actions/units";
 import { setTheme } from "../actions/theme";
 
 const ToggleUnit = (props) => {
-  const dispatch = useDispatch();
-
   return (
     <div className="toggle-wrapper">
-      <button onClick={() => dispatch(setUnit)}>+</button>
+      <button onClick={() => setUnit}>+</button>
       <div className="toggle-text">
         Cel
         <label className="switch">
-          <input type="checkbox" onChange={() => dispatch(setUnit)} />
+          <input type="checkbox" onChange={() => setUnit} />
           <span className="slider"></span>
         </label>
         Far
@@ -20,7 +18,7 @@ const ToggleUnit = (props) => {
       <div className="toggle-text">
         Day
         <label className="switch">
-          <input type="checkbox" onChange={() => dispatch(setTheme)} />
+          <input type="checkbox" onChange={() => setTheme} />
           <span className="slider dark"></span>
         </label>
         Night
@@ -34,4 +32,4 @@ const mapDispatchToProps = {
   setTheme,
 };
 
-export default connect(mapDispatchToProps)(ToggleUnit);
+export default connect(null, mapDispatchToProps)(ToggleUnit); // DONE mapdispatch c le 2eme argument, tu dois faire connect(null, mapDispatchToProps)
