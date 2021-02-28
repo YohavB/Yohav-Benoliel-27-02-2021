@@ -9,6 +9,13 @@ import snow from "./assets/snow.jpg";
 import storm from "./assets/storm.jpg";
 import sun from "./assets/sun.jpg";
 
+import { getFavorites } from "./selectors/favorites";
+import { setFavorite, removeFavorite } from "./actions/favorites";
+import { connect, useSelector } from "react-redux";
+import Forecast from "./Forecast/Forecast";
+import DailyWeather from "./DailyWeather/DailyWeather";
+import SearchBar from "./SearchBar/SearchBar";
+
 const data = [
   {
     Version: 1,
@@ -357,16 +364,11 @@ const api = {
   base: "http://dataservice.accuweather.com",
 };
 
-function Home() {
-  const [query, setQuery] = useState("Tel Aviv");
-  const [error, setError] = useState("");
-  const [autoCompletion, setAutoCompletion] = useState(data);
+function Home(props) {
   const [keyTown, setKeyTown] = useState("");
-  const [forecastData, setforecastData] = useState(dailyForecast);
-  const [weatherData, setWeatherData] = useState(dailyWeather);
   const [location, setLocation] = useState("Tel Aviv, Israel");
   const [mainBg, setMainBg] = useState(clear);
-  const [metric, setMetric] = useState(true)
+  const [isFavorite, setIsFavorite] = useState(false);
   const weatherNo = weatherData[0].WeatherIcon;
 
   // useEffect(() => {
@@ -374,79 +376,8 @@ function Home() {
   // }, []);
 
   useEffect(() => {
-    query && validateQuery();
-    // if (!error && query) {
-    //throttle(() => autocomplete(), 500)
-    //
-    // }
-  }, [query]);
-
-  useEffect(() => {
     bgSwitch();
   }, [weatherData]);
-
-  const validateQuery = () => {
-    if (!/^[a-zA-Z ]*$/i.test(query)) {
-      setError("Sorry but only English letters are allowed !");
-    } else {
-      setError("");
-    }
-  };
-
-  // working !!
-
-  // async function autocomplete() {
-  //   try {
-  //     const res = await axios.get(
-  //       `${api.base}/locations/v1/cities/autocomplete?apikey=%09${api.key}&q=${query}`
-  //     );
-
-  //     console.log(res.data);
-  //     console.log(res.status);
-  //     console.log(res.statusText);
-  //     setAutoCompletion(res.data);
-  //   } catch (e) {}
-  // }
-
-  // async function getForecast() {
-  //   try {
-  //     const res = axios.get(
-  //       `  ${api.base}/forecasts/v1/daily/5day/${keyTown}?apikey=%09${api.key}&metric=${metric}`
-  //     );
-
-  //     console.log(res.data);
-  //     console.log(res.status);
-  //     console.log(res.statusText);
-  //     setforecastData(res.data);
-  //   } catch (e) {}
-  // }
-
-  // async function getCurrentWeather() {
-  //   if (!error && query) {
-  //     try {
-  //       const res = axios.get(
-  //         `  ${api.base}/currentconditions/v1/${keyTown}?apikey=%09${api.key}`
-  //       );
-
-  //       console.log(res.data);
-  //       console.log(res.status);
-  //       console.log(res.statusText);
-  //       if (res.status === 200) {
-  //         setWeatherData(res.data);
-  //       } else {
-  //         setError("An Error has occured");
-  //       }
-  //     } catch (e) {}
-  //   } else if (!error && !query) {
-  //     setError("The Search Field is Empty!");
-  //   }
-  //   setQuery("");
-  // }
-
-  function selectOption(option) {
-    setQuery(option);
-    // getCurrentWeather();
-  }
 
   const bgSwitch = () => {
     switch (true) {
@@ -484,6 +415,16 @@ function Home() {
   //   }
   // };
 
+  const toggleFavorite = () => {
+    const { setFavorite, removeFavorite, id } = props;
+    if (!isFavorite) {
+      setFavorite(id);
+    } else {
+      removeFavorite(id);
+    }
+    setIsFavorite(!isFavorite);
+  };
+
   return (
     <div
       className="main"
@@ -492,101 +433,22 @@ function Home() {
         transition: "all 1s ease-in",
       }}
     >
-      {/* SEARCHBAR AND autoCompletion */}
-      <div className="search-box">
-        <input
-          onChange={(e) => setQuery(e.target.value)}
-          value={query}
-          type="text"
-          className="search-bar"
-          // onKeyDown={handleKey}
-          placeholder="Search for a Country/City/Town"
-        />
-
-        <div className="autocomp-options">
-          {autoCompletion &&
-            autoCompletion.map((item) => {
-              return (
-                <div
-                  className="autocomp-option"
-                  key={item.key}
-                  onClick={() => {
-                    selectOption(item.LocalizedName);
-                    setKeyTown(item.key);
-                    setLocation(item.LocalizedName, item.Country.LocalizedName);
-                  }}
-                >
-                  {item.LocalizedName}, {item.Country.LocalizedName}
-                </div>
-              );
-            })}
-        </div>
-      </div>
-      {error && <div className="error">{error}</div>}
-
-      {/* DAILY WEATHER DATA */}
-      <div className="daily-wrapper">
-        {weatherData &&
-          weatherData.map((item) => {
-            return (
-              <div>
-                <div className="location-box">
-                  <div className="fav-btn">FAV</div>
-                  <div className="location">{location}</div>
-                  <div className="date">
-                    {" "}
-                    <Moment format="dddd D MMMM  yyyy">{item.LocalObservationDateTime}</Moment>{" "}
-                  </div>
-                </div>
-                <div className="weather-box">
-                  <div className="temp">
-
-                    {item.Temperature.Metric.Value}{" "}
-                    {item.Temperature.Metric.Unit}
-                  </div>
-                  {/* {item.Temperature.`${metric ? Metric : Imperial}`.Value} {item.Temperature.`${metric ? Metric : Imperial}`.Unit} */}
-                  <div className="weather">{item.WeatherText}</div>
-                </div>
-              </div>
-            );
-          })}
-      </div>
-
-      {/* FORECAST */}
-
-      <div className="forecast">
-        {forecastData &&
-          forecastData.map((item) => {
-            return (
-              <div className="forecast-card" key={item.EpochDate}>
-                <div className="forecast-date">
-                  {" "}
-                  <Moment format="dddd D MMMM  yyyy">{item.Date}</Moment>{" "}
-                </div>
-                <div className="forecast-temp">
-                  <div className="min-temp">
-                    Min <br />
-                    {item.Temperature.Minimum.Value}
-                    {item.Temperature.Minimum.Unit}
-                  </div>{" "}
-                  <div className="max-temp">
-                    Max
-                    <br />
-                    {item.Temperature.Maximum.Value}
-                    {item.Temperature.Maximum.Unit}
-                  </div>
-                </div>
-
-                <div className="day-night">
-                  <div className="day">{item.Day.IconPhrase}</div>
-                  <div className="night">{item.Night.IconPhrase}</div>
-                </div>
-              </div>
-            );
-          })}
-      </div>
+      <SearchBar />
+      <DailyWeather location={location} />
+      <Forecast />
     </div>
   );
 }
 
-export default Home;
+const mapStateToProps = (state) => {
+  return {
+    favorites: getFavorites(state),
+  };
+};
+
+const mapDispatchToProps = {
+  setFavorite,
+  removeFavorite,
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(Home);
