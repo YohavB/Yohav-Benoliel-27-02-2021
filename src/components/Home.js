@@ -6,7 +6,6 @@ import snow from "./assets/snow.jpg";
 import storm from "./assets/storm.jpg";
 import sun from "./assets/sun.jpg";
 
-import { getFavorites } from "./selectors/data";
 import { getWeatherData } from "./selectors/data";
 import { setFavorite } from "./actions/data";
 import { connect } from "react-redux";
@@ -18,8 +17,7 @@ import SearchBar from "./SearchBar/SearchBar";
 function Home(props) {
   const [location, setLocation] = useState("");
   const [mainBg, setMainBg] = useState(clear);
-  const weatherNo = props.getWeatherData; //  c pour recup le number donne par lAPI pour changer le bg
-
+  const weatherNo = props.weatherData;
   useEffect(() => {
     bgSwitch();
   }, [weatherNo]);
@@ -30,15 +28,14 @@ function Home(props) {
 
   const getLocalFav = () => {
     if (localStorage.getItem("favorites-city") === null) {
-      localStorage.setItem("favorites-city", JSON.stringify([])); //  pourquoi? je verifie si il existe dans le local sinon je creer un json
+      localStorage.setItem("favorites-city", JSON.stringify([]));
     } else {
       let favLocal = JSON.parse(localStorage.getItem("favorites-city"));
-      props.setFavorite(favLocal); // DONE ca marche pas pck ca doit etre props.setFavorite
+      props.setFavorite(favLocal);
     }
   };
 
   const bgSwitch = () => {
-    // if done
     if (weatherNo < 5) {
       setMainBg(sun);
     } else if (weatherNo < 11) {
@@ -62,21 +59,21 @@ function Home(props) {
         transition: "all 1s ease-in",
       }}
     >
-      {/* <SearchBar setLocation={setLocation} />
+      <SearchBar setLocation={setLocation} />
       <DailyWeather location={location} />
-      <Forecast /> */}
+      <Forecast />
     </div>
   );
 }
 
 const mapStateToProps = (state) => {
   return {
-    weatherData: getWeatherData(state), //  tu l utilise pas non plus || si pour savoir quel bg utiliser
+    weatherData: getWeatherData(state),
   };
 };
 
 const mapDispatchToProps = {
-  setFavorite, //  pk besoin de favorite dans la home? pcq je le set avec le useeffect des que lappli monte
+  setFavorite,
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(Home);

@@ -23,7 +23,7 @@ export const metric = (state = initialState.metric, action) => {
     case SET_METRIC:
       return {
         ...state,
-        metric: action.metric,
+        metric: !metric,
       };
     default:
       return state;

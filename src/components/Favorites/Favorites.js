@@ -3,7 +3,6 @@ import { getFavorites } from "../selectors/data";
 import { connect } from "react-redux";
 import FavoriteCard from "../FavoriteCard/FavoriteCard";
 import "./Favorites.css";
-import { Link } from "react-router-dom";
 
 const data = [
   { favoriteTownID: 215854, favoriteTownName: "Tel Aviv" },
@@ -19,13 +18,13 @@ function Favorites(props) {
   return (
     <div className="favorite-card">
       {favoritesTown.map((item) => (
-        <Link to={`/`}>
+        
           <FavoriteCard
             key={item.favoriteTownID}
             favoriteTownID={item.favoriteTownID}
             favoriteTownName={item.favoriteTownName}
-          />{" "}
-        </Link>
+          />
+        
       ))}
     </div>
   );

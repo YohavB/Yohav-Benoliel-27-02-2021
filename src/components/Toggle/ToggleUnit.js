@@ -1,16 +1,16 @@
 import React from "react";
 import { connect } from "react-redux";
-import { setUnit } from "../actions/settings";
+import { setMetric } from "../actions/settings";
 import { setTheme } from "../actions/settings";
 
 const ToggleUnit = (props) => {
   return (
     <div className="toggle-wrapper">
-      <button onClick={props.setUnit}>+</button>
+      <button onClick={props.setMetric}>+</button>
       <div className="toggle-text">
         Cel
         <label className="switch">
-          <input type="checkbox" onChange={props.setUnit} />
+          <input type="checkbox" onChange={props.setMetric}  />
           <span className="slider"></span>
         </label>
         Far
@@ -28,7 +28,7 @@ const ToggleUnit = (props) => {
 };
 
 const mapDispatchToProps = {
-  setUnit,
+  setMetric,
   setTheme,
 };
 

@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import Moment from "react-moment";
 import { connect } from "react-redux";
 import { getWeatherData } from "../selectors/data";
+import { getMetric } from "../selectors/settings";
 import { setFavorite } from "../actions/data";
 
 import "./DailyWeather.css";
@@ -23,13 +24,12 @@ function DailyWeather(props, location) {
     localStorage.setItem("favorites-city", JSON.stringify(props.favorites));
   };
 
-  const metric = props.metric ? "Metric" : "Imperial";
+  const unit = props.metric ? "Metric" : "Imperial";
 
   return (
     <div>
       <div className="daily-wrapper">
-        {props.getWeatherData.map((item) => {
-          // DONE props.weatherData.map, pas getWeatherData
+        {props.getWeatherData[0].map((item) => {
           return (
             <div>
               <div className="location-box">
@@ -55,7 +55,7 @@ function DailyWeather(props, location) {
                 <div className="temp">
                   {item.Temperature.Metric.Value} {item.Temperature.Metric.Unit}
                 </div>
-                {item.Temperature[metric].Value} {item.Temperature[metric].Unit}
+                {item.Temperature[unit].Value} {item.Temperature[unit].Unit}
                 <div className="weather">{item.WeatherText}</div>
               </div>
             </div>
@@ -69,6 +69,7 @@ function DailyWeather(props, location) {
 const mapStateToProps = (state) => {
   return {
     weatherData: getWeatherData(state),
+    metric: getMetric(state),
   };
 };
 

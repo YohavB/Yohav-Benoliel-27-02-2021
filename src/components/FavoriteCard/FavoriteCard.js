@@ -5,6 +5,8 @@ import { connect } from "react-redux";
 import { getMetric } from "../selectors/settings";
 import "./FavoriteCard.css";
 import { removeFavorite } from "../actions/data";
+import { Link } from "react-router-dom";
+
 import { api } from "../api/api";
 
 const data = [
@@ -45,6 +47,7 @@ function FavoriteCard(props) {
 
   useEffect(() => {
     setFavoriteWeatherData(data);
+    getCurrentWeather();
   }, []);
 
   async function getCurrentWeather() {
@@ -77,23 +80,25 @@ function FavoriteCard(props) {
           <button className="favbtn" onClick={removeFavorite}>
             FAV
           </button>
-          <div className="location fav">{props.favoriteTownName}</div>
-          <div className="date fav">
-            {" "}
-            <Moment format="dddd D MMMM  yyyy">
-              {favoriteWeatherData[0].LocalObservationDateTime}
-            </Moment>{" "}
-          </div>
-          <div className="weather-box fav">
-            <div className="temp fav">
-              {favoriteWeatherData[0].Temperature[unit].Value}{" "}
-              {favoriteWeatherData[0].Temperature[unit].Unit}
+          <Link to="/">
+            <div className="location fav">{props.favoriteTownName}</div>
+            <div className="date fav">
+              {" "}
+              <Moment format="dddd D MMMM  yyyy">
+                {favoriteWeatherData[0].LocalObservationDateTime}
+              </Moment>{" "}
             </div>
+            <div className="weather-box fav">
+              <div className="temp fav">
+                {favoriteWeatherData[0].Temperature[unit].Value}{" "}
+                {favoriteWeatherData[0].Temperature[unit].Unit}
+              </div>
 
-            <div className="weather fav">
-              {favoriteWeatherData[0].WeatherText}
+              <div className="weather fav">
+                {favoriteWeatherData[0].WeatherText}
+              </div>
             </div>
-          </div>
+          </Link>
         </div>
       )}
     </div>

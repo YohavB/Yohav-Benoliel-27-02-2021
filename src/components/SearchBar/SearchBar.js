@@ -5,6 +5,7 @@ import React, { useEffect, useState } from "react";
 import "./SearchBar.css";
 
 import { setWeatherData } from "../actions/data";
+import { getMetric } from "../selectors/settings";
 import { getTownID } from "../selectors/data";
 import { setTownID } from "../actions/data";
 import { connect } from "react-redux";
@@ -13,12 +14,16 @@ import { api } from "../api/api";
 function SearchBar(props) {
   const [query, setQuery] = useState("Tel Aviv");
   const [error, setError] = useState("");
-  const [autoCompletion, setAutoCompletion] = useState([]); // DONE manque default - ptetre [] t'as raison
+  const [autoCompletion, setAutoCompletion] = useState([]);
+
+  useEffect(() => {
+    getCurrentWeather();
+  }, []);
 
   useEffect(() => {
     query && validateQuery();
     if (!error && query) {
-      throttle(autocomplete, 500); // DONE throttle(autocomplete, 500); a la place
+      throttle(autocomplete, 500);
     }
   }, [query]);
 
@@ -26,7 +31,7 @@ function SearchBar(props) {
     if (!/^[a-zA-Z ]*$/i.test(query)) {
       setError("Sorry but only English letters are allowed !");
     } else {
-      setError(""); // DONE pk besoin de else? pcw faut reset lerror si tout va bien
+      setError("");
     }
   };
 
@@ -114,6 +119,7 @@ function SearchBar(props) {
 const mapStateToProps = (state) => {
   return {
     townID: getTownID(state),
+    metric: getMetric(state),
   };
 };
 

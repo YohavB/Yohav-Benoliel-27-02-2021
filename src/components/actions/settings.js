@@ -14,6 +14,6 @@ export function setTheme(theme) {
   return { type: SET_THEME, theme };
 }
 
-export function setUnit(metric) {
+export function setMetric(metric) {
   return { type: SET_METRIC, metric };
 }
