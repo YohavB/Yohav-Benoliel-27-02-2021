@@ -1,12 +1,9 @@
 import { combineReducers } from "redux";
-import unit from "./units";
-import favorites from "./favorites";
-import theme from "./theme";
-import townID from "./townID";
-import weatherData from "./weatherData";
+import { metric, theme } from "./settings";
+import { favorites, townID, weatherData } from "./data";
 
 const reducers = combineReducers({
-  unit,
+  metric,
   favorites,
   theme,
   townID,

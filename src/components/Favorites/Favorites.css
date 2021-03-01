@@ -1,0 +1,14 @@
+.favorite-card {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content:space-around;
+  align-content: flex-start;
+  background-image: url(../assets/fav-bg.jpg);
+  -webkit-background-size: cover;
+  -moz-background-size: cover;
+  -o-background-size: cover;
+  background-size: cover;
+  min-height: calc(100% - 50px);
+}
+
+

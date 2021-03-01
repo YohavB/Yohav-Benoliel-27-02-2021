@@ -20,16 +20,16 @@ function DailyWeather(props, location) {
   };
 
   const saveLocalFav = () => {
-    localStorage.setItem("favorites-city", JSON.stringify(props.favorites)); 
+    localStorage.setItem("favorites-city", JSON.stringify(props.favorites));
   };
 
-  const unit = props.unit ? "Metric" : "Imperial";
+  const metric = props.metric ? "Metric" : "Imperial";
 
   return (
     <div>
       <div className="daily-wrapper">
         {props.getWeatherData.map((item) => {
-          // DONE props.weatherData.map, pas getWeatherData 
+          // DONE props.weatherData.map, pas getWeatherData
           return (
             <div>
               <div className="location-box">
@@ -55,7 +55,7 @@ function DailyWeather(props, location) {
                 <div className="temp">
                   {item.Temperature.Metric.Value} {item.Temperature.Metric.Unit}
                 </div>
-                {item.Temperature[unit].Value} {item.Temperature[unit].Unit}
+                {item.Temperature[metric].Value} {item.Temperature[metric].Unit}
                 <div className="weather">{item.WeatherText}</div>
               </div>
             </div>

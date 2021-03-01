@@ -62,16 +62,15 @@ function Home(props) {
         transition: "all 1s ease-in",
       }}
     >
-      <SearchBar setLocation={setLocation} />
+      {/* <SearchBar setLocation={setLocation} />
       <DailyWeather location={location} />
-      <Forecast />
+      <Forecast /> */}
     </div>
   );
 }
 
 const mapStateToProps = (state) => {
   return {
-    favorites: getFavorites(state), //  tu l utilise pas || ca faut que je le mette dans le local storge
     weatherData: getWeatherData(state), //  tu l utilise pas non plus || si pour savoir quel bg utiliser
   };
 };

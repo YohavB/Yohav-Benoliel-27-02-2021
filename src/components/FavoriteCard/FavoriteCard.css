@@ -1,0 +1,52 @@
+.wrapper {
+  height: fit-content;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.card {
+  position: relative;
+  margin: 10px 0 10px 0;
+  border-radius: 10px;
+  cursor: pointer;
+  border: 5px solid rgba(255, 255, 255, 0.5);
+  transition: all 0.2s ease-in-out;
+  padding: 10px;
+  background-color: rgba(255, 255, 255, 0.25);
+}
+
+.card:hover {
+  margin-top: 15px;
+  -webkit-box-shadow: 20px 7px 35px -5px rgba(0, 0, 0, 0.75);
+  -moz-box-shadow: 20px 7px 35px -5px rgba(0, 0, 0, 0.75);
+  box-shadow: 20px 7px 35px -5px rgba(0, 0, 0, 0.75);
+}
+
+.favbtn {
+  position: absolute;
+  right: 10px;
+  margin-top: 10px;
+  cursor: pointer;
+}
+
+.location.fav {
+  font-size: clamp(30px, 4vw, 50px);
+}
+.date.fav {
+  font-size: clamp(20px, 2vw, 50px);
+}
+.weather-box.fav {
+  margin: 20px auto 0 auto;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.temp.fav {
+  font-size: clamp(30px, 5vw, 50px);
+}
+.weather.fav {
+  width: fit-content;
+  font-size: clamp(20px, 4vw, 50px);
+}

@@ -1,34 +1,32 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { getFavorites } from "../selectors/data";
-import { connect, useSelector } from "react-redux";
+import { connect } from "react-redux";
 import FavoriteCard from "../FavoriteCard/FavoriteCard";
+import "./Favorites.css";
+import { Link } from "react-router-dom";
+
+const data = [
+  { favoriteTownID: 215854, favoriteTownName: "Tel Aviv" },
+  { favoriteTownID: 215415, favoriteTownName: "Tel Aviv" },
+  { favoriteTownID: 515484, favoriteTownName: "Tel Aviv" },
+];
 
 function Favorites(props) {
-  const [favoritesTown, setFavoritesTown] = useState(
-    useSelector((state) => state.favorites)
-  );
+  const [favoritesTown, setFavoritesTown] = useState(data);
 
-  // async componentDidMount() {
-  //     const {favorites} = props
-  //     const favoritesTown = []
-  //     for await (let id of favorites) {
-  //         const request = getCurrentWeather(id)
-  //         const response = await axios.get(request)
-  //         const results = response.data.data.results[0]
-  //         console.log(results)
-  //         favorites.push(results)
-  //     }
-  //     setFavoritesTown({favorites})
-  // }
+  useEffect(() => {}, []);
 
   return (
-    <div>
-      <div className="favorite">Favorites</div>
-      <div className="favorite-card">
-        {favoritesTown.map((item) => (
-          <FavoriteCard favoriteTownID={props.favoritesTown.favoriteTownID} />
-        ))}
-      </div>
+    <div className="favorite-card">
+      {favoritesTown.map((item) => (
+        <Link to={`/`}>
+          <FavoriteCard
+            key={item.favoriteTownID}
+            favoriteTownID={item.favoriteTownID}
+            favoriteTownName={item.favoriteTownName}
+          />{" "}
+        </Link>
+      ))}
     </div>
   );
 }

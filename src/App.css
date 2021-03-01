@@ -48,66 +48,6 @@ a {
   font-weight: bold;
 }
 
-/* SEARCHBAR AND autoCompletion */
-
-.search-box {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  position: relative;
-}
-
-.search-bar {
-  display: block;
-  width: 50%;
-  height: 30px;
-  appearance: none;
-  background: none;
-  border: none;
-  outline: none;
-  background-color: rgba(255, 255, 255, 0.5);
-  border-radius: 0px 0px 16px 16px;
-  box-shadow: 0px 5px rgba(0, 0, 0, 0.2);
-  color: #313131;
-  font-size: 20px;
-  transition: 0.4s ease;
-  text-align: center;
-}
-
-.search-bar:focus {
-  background-color: rgba(255, 255, 255, 0.75);
-}
-
-.autocomp-options {
-  z-index: 2;
-  top: 110%;
-  position: absolute;
-  width: 40%;
-  background-color: rgba(255, 255, 255, 0.75);
-  display: none;
-}
-
-.autocomp-option {
-  border-top: 0.5px solid rgba(112, 112, 112, 0.5);
-  cursor: pointer;
-}
-
-:hover.autocomp-option {
-  background: rgba(112, 112, 122, 0.15);
-  z-index: 3;
-}
-
-.error {
-  width: fit-content;
-  border-radius: 10px;
-  padding: 0 10px 0 10px;
-  background: rgba(247, 16, 16, 0.5);
-  color: rgb(255, 0, 0);
-  margin: auto;
-  margin-top: 5px;
-}
-
 /*toggle button*/
 
 .toggle-wrapper {

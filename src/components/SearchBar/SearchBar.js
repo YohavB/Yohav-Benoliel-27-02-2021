@@ -2,6 +2,8 @@ import axios from "axios";
 import { throttle } from "lodash";
 import React, { useEffect, useState } from "react";
 
+import "./SearchBar.css";
+
 import { setWeatherData } from "../actions/data";
 import { getTownID } from "../selectors/data";
 import { setTownID } from "../actions/data";
@@ -52,12 +54,12 @@ function SearchBar(props) {
         console.log(res.status);
         console.log(res.statusText);
         if (res.status === 200) {
-          props.setWeatherData(res.data); // DONE celui des props, pas celui importé
+          props.setWeatherData[0](res.data);
         } else {
           setError("An Error has occured");
         }
       } catch (e) {
-        setError(`An Error has occured, ${e}`); // DONE met qqchose dans l erreur
+        setError(`An Error has occured, ${e}`);
       }
     } else if (!error && !query) {
       setError("The Search Field is Empty!");
