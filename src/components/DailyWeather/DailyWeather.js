@@ -1,21 +1,28 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import _ from "lodash"
 import Moment from "react-moment";
 import { connect } from "react-redux";
-import { getWeatherData } from "../selectors/data";
+import {getFavorites, getTownID, getTownName, getWeatherData} from "../selectors/data"
 import { getMetric } from "../selectors/settings";
-import { setFavorite } from "../actions/data";
+import {removeFavorite, setFavorite} from "../actions/data"
 
 import "./DailyWeather.css";
 
-function DailyWeather(props, location) {
-  const [isFavorite, setIsFavorite] = useState(false); // get and set from redux
+function DailyWeather(props) {
+	const {weatherData, townName, townID, favorites} = props
+  const [isFavorite, setIsFavorite] = useState(false);
+
+	useEffect(() => {
+		const isFav = favorites.find(item => item.townID === townID)
+		setIsFavorite(!!isFav)
+	}, [townID])
 
   const toggleFavorite = () => {
-    const { setFavorite, removeFavorite, id } = props;
+    const { setFavorite, removeFavorite } = props;
     if (!isFavorite) {
-      setFavorite(id);
+      setFavorite({townID, townName});
     } else {
-      removeFavorite(id);
+      removeFavorite(townID);
     }
     setIsFavorite(!isFavorite);
   };
@@ -25,42 +32,37 @@ function DailyWeather(props, location) {
   };
 
   const unit = props.metric ? "Metric" : "Imperial";
-
+	if (_.isEmpty(weatherData)) {
+		return null
+	}
   return (
     <div>
       <div className="daily-wrapper">
-        {props.getWeatherData[0].map((item) => {
-          return (
             <div>
               <div className="location-box">
                 <div className="fav-btn">
                   {" "}
                   <input
                     type="checkbox"
-                    checked={
-                      toggleFavorite /* TODO c cense etre un boolean, pas une fonction || ?? */
-                    }
+                    checked={isFavorite}
                     onChange={toggleFavorite}
                   />
                 </div>
-                <div className="location">{location}</div>
+                <div className="location">{townName}</div>
                 <div className="date">
                   {" "}
                   <Moment format="dddd D MMMM  yyyy">
-                    {item.LocalObservationDateTime}
+                    {weatherData.LocalObservationDateTime}
                   </Moment>{" "}
                 </div>
               </div>
               <div className="weather-box">
                 <div className="temp">
-                  {item.Temperature.Metric.Value} {item.Temperature.Metric.Unit}
+	                {weatherData.Temperature[unit].Value} {weatherData.Temperature[unit].Unit}
                 </div>
-                {item.Temperature[unit].Value} {item.Temperature[unit].Unit}
-                <div className="weather">{item.WeatherText}</div>
+                <div className="weather">{weatherData.WeatherText}</div>
               </div>
             </div>
-          );
-        })}
       </div>
     </div>
   );
@@ -70,11 +72,14 @@ const mapStateToProps = (state) => {
   return {
     weatherData: getWeatherData(state),
     metric: getMetric(state),
+    townID: getTownID(state),
+    townName: getTownName(state),
+    favorites: getFavorites(state),
   };
 };
 
 const mapDispatchToProps = {
-  setFavorite,
+  setFavorite, removeFavorite,
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(DailyWeather);

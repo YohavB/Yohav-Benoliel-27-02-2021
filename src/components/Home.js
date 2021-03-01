@@ -6,8 +6,8 @@ import snow from "./assets/snow.jpg";
 import storm from "./assets/storm.jpg";
 import sun from "./assets/sun.jpg";
 
-import { getWeatherData } from "./selectors/data";
-import { setFavorite } from "./actions/data";
+import {getFavorites, getTownID, getWeatherData} from "./selectors/data"
+import {populateFavorites, setFavorite} from "./actions/data"
 import { connect } from "react-redux";
 
 import Forecast from "./Forecast/Forecast";
@@ -15,25 +15,44 @@ import DailyWeather from "./DailyWeather/DailyWeather";
 import SearchBar from "./SearchBar/SearchBar";
 
 function Home(props) {
-  const [location, setLocation] = useState("");
   const [mainBg, setMainBg] = useState(clear);
-  const weatherNo = props.weatherData;
+  const [lat, setLat] = useState(null);
+  const [lon, setLon] = useState(null);
+  const weatherNo = props.weatherData.WeatherIcon;
+
+  useEffect(() => {
+	  getLatitudeLongitude();
+  }, []);
+
   useEffect(() => {
     bgSwitch();
   }, [weatherNo]);
 
-  useEffect(() => {
-    getLocalFav();
-  }, []);
+  function getLatitudeLongitude() {
+	  var options = {
+		  enableHighAccuracy: true,
 
-  const getLocalFav = () => {
-    if (localStorage.getItem("favorites-city") === null) {
-      localStorage.setItem("favorites-city", JSON.stringify([]));
-    } else {
-      let favLocal = JSON.parse(localStorage.getItem("favorites-city"));
-      props.setFavorite(favLocal);
-    }
-  };
+
+		  
+		  timeout: 10,
+		  maximumAge: 0,
+	  };
+
+	  function success(pos) {
+		  const lat = pos.coords.latitude;
+		  const lon = pos.coords.longitude;
+		  setLat(lat);
+		  setLon(lon);
+	  }
+
+	  function error(err) {
+		  console.warn(`ERROR(${err.code}): ${err.message}`);
+		  setLat(32.0853);
+		  setLon(34.7818);
+	  }
+
+	  navigator.geolocation.getCurrentPosition(success, error, options);
+  }
 
   const bgSwitch = () => {
     if (weatherNo < 5) {
@@ -50,7 +69,9 @@ function Home(props) {
       setMainBg(clear);
     }
   };
-
+if ((!lat || !lon) && !props.townID) {
+	return null;
+}
   return (
     <div
       className="main"
@@ -59,8 +80,8 @@ function Home(props) {
         transition: "all 1s ease-in",
       }}
     >
-      <SearchBar setLocation={setLocation} />
-      <DailyWeather location={location} />
+      <SearchBar lat={lat} lon={lon} setLat={setLat} setLon={setLon} />
+      <DailyWeather />
       <Forecast />
     </div>
   );
@@ -69,11 +90,8 @@ function Home(props) {
 const mapStateToProps = (state) => {
   return {
     weatherData: getWeatherData(state),
+	  townID: getTownID(state),
   };
 };
 
-const mapDispatchToProps = {
-  setFavorite,
-};
-
-export default connect(mapStateToProps, mapDispatchToProps)(Home);
+export default connect(mapStateToProps)(Home);

@@ -4,57 +4,23 @@ import Moment from "react-moment";
 import { connect } from "react-redux";
 import { getMetric } from "../selectors/settings";
 import "./FavoriteCard.css";
-import { removeFavorite } from "../actions/data";
+import {removeFavorite, setTownID, setTownName} from "../actions/data"
 import { Link } from "react-router-dom";
 
 import { api } from "../api/api";
-
-const data = [
-  {
-    LocalObservationDateTime: "2021-03-01T10:31:00+02:00",
-    EpochTime: 1614587460,
-    WeatherText: "A shower",
-    WeatherIcon: 13,
-    HasPrecipitation: true,
-    PrecipitationType: "Rain",
-    IsDayTime: true,
-    Temperature: {
-      Metric: {
-        Value: 15.4,
-        Unit: "C",
-        UnitType: 17,
-      },
-      Imperial: {
-        Value: 60,
-        Unit: "F",
-        UnitType: 18,
-      },
-    },
-    MobileLink:
-      "http://m.accuweather.com/en/il/tel-aviv/215854/current-weather/215854?lang=en-us",
-    Link:
-      "http://www.accuweather.com/en/il/tel-aviv/215854/current-weather/215854?lang=en-us",
-  },
-];
+import {getCurrentWeatherAPI} from "../api/wheaterApi"
 
 function FavoriteCard(props) {
   const [favoriteWeatherData, setFavoriteWeatherData] = useState([]);
   const [loader, setLoader] = useState(true);
 
   useEffect(() => {
-    setLoader(false);
-  }, [favoriteWeatherData]);
-
-  useEffect(() => {
-    setFavoriteWeatherData(data);
     getCurrentWeather();
   }, []);
 
   async function getCurrentWeather() {
     try {
-      const res = await axios.get(
-        `  ${api.base}/currentconditions/v1/${props.favoriteTownID}?apikey=%09${api.key}`
-      );
+      const res = await getCurrentWeatherAPI(props.favoriteTownID)
       console.log(res.data);
       console.log(res.status);
       console.log(res.statusText);
@@ -69,7 +35,12 @@ function FavoriteCard(props) {
     }
   }
 
-  const unit = props.metric ? "Metric" : "Imperial";
+  const setCurrentTown = () => {
+	  props.setTownID(props.favoriteTownID)
+	  props.setTownName(props.favoriteTownName)
+  }
+
+  const unit = !props.metric ? "Metric" : "Imperial";
 
   return (
     <div className="wrapper">
@@ -77,15 +48,15 @@ function FavoriteCard(props) {
         <div> LOADING </div>
       ) : (
         <div className="card">
-          <button className="favbtn" onClick={removeFavorite}>
+          <button className="favbtn" onClick={() => props.removeFavorite(props.favoriteTownID)}>
             FAV
           </button>
-          <Link to="/">
+          <Link to="/" onClick={setCurrentTown}>
             <div className="location fav">{props.favoriteTownName}</div>
             <div className="date fav">
               {" "}
               <Moment format="dddd D MMMM  yyyy">
-                {favoriteWeatherData[0].LocalObservationDateTime}
+                {favoriteWeatherData.LocalObservationDateTime}
               </Moment>{" "}
             </div>
             <div className="weather-box fav">
@@ -113,6 +84,8 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = {
   removeFavorite,
+  setTownID,
+  setTownName,
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(FavoriteCard);

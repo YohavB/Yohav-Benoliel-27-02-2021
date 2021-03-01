@@ -6,25 +6,18 @@ const initialState = {
   metric: true,
 };
 
-export const theme = (state = initialState.theme, action) => {
+export default function reducer(state = initialState, action) {
   switch (action.type) {
-    case SET_THEME:
-      return {
-        ...state,
-        theme: !theme,
-      };
-    default:
-      return state;
-  }
-};
-
-export const metric = (state = initialState.metric, action) => {
-  switch (action.type) {
-    case SET_METRIC:
-      return {
-        ...state,
-        metric: !metric,
-      };
+	case SET_THEME: // TODO TOGGLE_THEME
+	  return {
+	    ...state,
+	    theme: !state.theme,
+	  };
+	case SET_METRIC: // TODO TOGGLE_METRIC
+		return {
+		  ...state,
+		  metric: !state.metric,
+		};
     default:
       return state;
   }

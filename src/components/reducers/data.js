@@ -1,51 +1,47 @@
-import { SET_FAVORITE, REMOVE_FAVORITE } from "../actions/data";
+import { SET_FAVORITE, REMOVE_FAVORITE, SET_TOWN_NAME, POPULATE_FAVORITE } from "../actions/data";
 import { SET_TOWNID } from "../actions/data";
 import { SET_WEATHER_DATA } from "../actions/data";
 
 const initialState = {
   favorites: [],
-  weatherData: [],
-  townID: "",
+  weatherData: {},
+  townID: "", // TODO currentTownID
+  townName: "",
 };
 
-export const favorites = (state = initialState.favorites, action) => {
+export default function reducer(state = initialState, action) {
   switch (action.type) {
     case SET_FAVORITE:
       return {
         ...state,
-        favorites: [...state.favorites, action.id],
+        favorites: [...state.favorites, action.favorite],
+      };
+    case POPULATE_FAVORITE:
+      return {
+        ...state,
+        favorites: action.favorites,
       };
     case REMOVE_FAVORITE:
       return {
         ...state,
-        favorites: state.favorites.find((id) => id !== action.id),
+        favorites: state.favorites.filter((item) => item.townID !== action.id),
       };
-    default:
-      return state;
-  }
-};
-
-export const townID = (state = initialState.townID, action) => {
-  switch (action.type) {
-    case SET_TOWNID:
-      return {
-        ...state,
-        townID: action.townID,
-      };
-    default:
-      return state;
-  }
-};
-
-export const weatherData = (state = initialState.weatherData, action) => {
-  switch (action.type) {
-    case SET_WEATHER_DATA:
-      return {
-        ...state,
-        weatherData: [...state.weatherData, action.id],
-      };
-
-    default:
-      return state;
+	case SET_TOWNID:
+	  return {
+		  ...state,
+		  townID: action.townID,
+	  };
+	case SET_TOWN_NAME:
+	  return {
+		  ...state,
+		  townName: action.townName,
+	  };
+	case SET_WEATHER_DATA:
+	  return {
+		  ...state,
+		  weatherData: action.weatherData,
+	  };
+	default:
+		return state;
   }
 };

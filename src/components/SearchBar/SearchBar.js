@@ -1,29 +1,42 @@
 import axios from "axios";
-import { throttle } from "lodash";
+import _ from "lodash";
 import React, { useEffect, useState } from "react";
 
 import "./SearchBar.css";
 
-import { setWeatherData } from "../actions/data";
+import {setTownName, setWeatherData} from "../actions/data"
 import { getMetric } from "../selectors/settings";
 import { getTownID } from "../selectors/data";
 import { setTownID } from "../actions/data";
 import { connect } from "react-redux";
 import { api } from "../api/api";
+import {autocompleteAPI, getCurrentWeatherAPI, getWeatherByPositionAPI} from "../api/wheaterApi"
 
 function SearchBar(props) {
-  const [query, setQuery] = useState("Tel Aviv");
+	const {lat, lon, townID, setLat, setLon} = props
+  const [query, setQuery] = useState("");
   const [error, setError] = useState("");
   const [autoCompletion, setAutoCompletion] = useState([]);
 
   useEffect(() => {
-    getCurrentWeather();
+    if (lat && lon) {
+      getPositionWeather();
+    } else {
+	    getCurrentWeather()
+    }
   }, []);
+
+  useEffect(() => {
+	  getCurrentWeather()
+	  setLat(null)
+	  setLon(null)
+  }, [townID]);
 
   useEffect(() => {
     query && validateQuery();
     if (!error && query) {
-      throttle(autocomplete, 500);
+	    // _.debounce(autocomplete, 500); TODO s'occuper de ca
+	    autocomplete()
     }
   }, [query]);
 
@@ -36,10 +49,9 @@ function SearchBar(props) {
   };
 
   async function autocomplete() {
+  	console.log("autocomplete")
     try {
-      const res = await axios.get(
-        `${api.base}/locations/v1/cities/autocomplete?apikey=%09${api.key}&q=${query}`
-      );
+      const res = await autocompleteAPI(query)
 
       console.log(res.data);
       console.log(res.status);
@@ -49,38 +61,51 @@ function SearchBar(props) {
   }
 
   async function getCurrentWeather() {
-    if (!error && query) {
+    if (!error) {
       try {
-        const res = await axios.get(
-          `  ${api.base}/currentconditions/v1/${props.townID}?apikey=%09${api.key}`
-        );
+        const res = await getCurrentWeatherAPI(props.townID)
 
         console.log(res.data);
         console.log(res.status);
         console.log(res.statusText);
         if (res.status === 200) {
-          props.setWeatherData[0](res.data);
+          props.setWeatherData(res.data[0]);
+          // props.setTownName(res.data.LocalizedName) //
         } else {
           setError("An Error has occured");
         }
       } catch (e) {
         setError(`An Error has occured, ${e}`);
       }
-    } else if (!error && !query) {
-      setError("The Search Field is Empty!");
+    // } else if (!error && !query) {
+    //   setError("The Search Field is Empty!");
     }
     setQuery("");
   }
 
-  const selectOption = (option) => {
-    setQuery(option);
-    getCurrentWeather();
-  };
+  async function getPositionWeather() {
+    try {
+      const res = await getWeatherByPositionAPI(lat, lon);
+      console.log(res.data);
+      console.log(res.status);
+      console.log(res.statusText);
+      if (res.status === 200) {
+        props.setTownID(res.data.Key);
+        props.setTownName(`${res.data.LocalizedName}, ${res.data.Country.LocalizedName}`)
+        getCurrentWeather();
+      } else {
+        setError("An Error has occured");
+      }
+    } catch (e) {
+      setError(`An Error has occured, ${e}`);
+    }
+
+    setQuery("");
+  }
 
   const onOptionClick = (item) => {
-    selectOption(item.LocalizedName);
-    props.setTownID(item.key); // DONE des props la pure de ta race
-    props.setLocation(item.LocalizedName, item.Country.LocalizedName);
+    props.setTownID(item.Key);
+    props.setTownName(`${item.LocalizedName}, ${item.Country.LocalizedName}`);
   };
 
   return (
@@ -95,14 +120,14 @@ function SearchBar(props) {
         />
 
         <div className="autocomp-options">
-          {autoCompletion &&
+          {query &&
             autoCompletion.map((item) => {
               return (
                 <div
                   className="autocomp-option"
                   key={item.key}
                   onClick={() => {
-                    onOptionClick(item); // DONE sort ca dans une fonction
+                    onOptionClick(item);
                   }}
                 >
                   {item.LocalizedName}, {item.Country.LocalizedName}
@@ -126,6 +151,7 @@ const mapStateToProps = (state) => {
 const mapDispatchToProps = {
   setWeatherData,
   setTownID,
+	setTownName,
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(SearchBar);

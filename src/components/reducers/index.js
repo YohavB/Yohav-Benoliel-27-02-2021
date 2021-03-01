@@ -1,13 +1,10 @@
 import { combineReducers } from "redux";
-import { metric, theme } from "./settings";
-import { favorites, townID, weatherData } from "./data";
+import reducerSettings from "./settings";
+import reducerData from "./data";
 
 const reducers = combineReducers({
-  metric,
-  favorites,
-  theme,
-  townID,
-  weatherData,
+	reducerData,
+	reducerSettings,
 });
 
 export default reducers;

@@ -1,23 +1,31 @@
 import axios from "axios";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Moment from "react-moment";
 import "./Forecast.css";
 
 import { api } from "../api/api";
+import {getForecastAPI} from "../api/wheaterApi"
+import {getTownID, getWeatherData} from "../selectors/data"
+import {setFavorite} from "../actions/data"
+import {connect} from "react-redux"
+import {getMetric} from "../selectors/settings"
 
-export default function Forecast(props) {
+function Forecast(props) {
   const [forecastData, setforecastData] = useState([]);
+	const {townID, metric} = props
+  useEffect(() => {
+	  getForecast()
+  }, [townID, metric])
 
   async function getForecast() {
+  	const {townID, metric} = props
     try {
-      const res = await axios.get(
-        `  ${api.base}/forecasts/v1/daily/5day/${props.townID}?apikey=%09${api.key}&metric=${props.metric}`
-      ); // DONE manque le await
+      const res = await getForecastAPI(townID, metric)
 
       console.log(res.data);
       console.log(res.status);
       console.log(res.statusText);
-      setforecastData(res.data);
+      setforecastData(res.data.DailyForecasts);
     } catch (e) {}
   }
 
@@ -55,3 +63,13 @@ export default function Forecast(props) {
     </div>
   );
 }
+
+
+const mapStateToProps = (state) => {
+	return {
+		townID: getTownID(state),
+		metric: getMetric(state),
+	};
+};
+
+export default connect(mapStateToProps)(Forecast);

@@ -6,11 +6,13 @@ import { setTheme } from "../actions/settings";
 const ToggleUnit = (props) => {
   return (
     <div className="toggle-wrapper">
-      <button onClick={props.setMetric}>+</button>
       <div className="toggle-text">
         Cel
         <label className="switch">
-          <input type="checkbox" onChange={props.setMetric}  />
+          <input
+            type="checkbox"
+            onClick={props.setMetric}
+          />
           <span className="slider"></span>
         </label>
         Far
@@ -18,7 +20,10 @@ const ToggleUnit = (props) => {
       <div className="toggle-text">
         Day
         <label className="switch">
-          <input type="checkbox" onChange={props.setTheme} />
+          <input
+            type="checkbox"
+            onClick={props.setTheme}
+          />
           <span className="slider dark"></span>
         </label>
         Night
@@ -32,4 +37,4 @@ const mapDispatchToProps = {
   setTheme,
 };
 
-export default connect(null, mapDispatchToProps)(ToggleUnit); // DONE mapdispatch c le 2eme argument, tu dois faire connect(null, mapDispatchToProps)
+export default connect(null, mapDispatchToProps)(ToggleUnit);
