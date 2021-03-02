@@ -44,7 +44,7 @@ function Home(props) {
 
     function error(err) {
       setLat(32.0833);
-      setLon(34.8000);
+      setLon(34.8);
     }
 
     navigator.geolocation.getCurrentPosition(success, error, options);
@@ -66,7 +66,12 @@ function Home(props) {
     }
   };
   if ((!lat || !lon) && !props.townID) {
-    return null;
+    return (
+      <div className="sorry">
+        Sorry, but it's seems like the allowed number of requests has been
+        exceeded. Try tomorrow.
+      </div>
+    );
   }
   return (
     <div

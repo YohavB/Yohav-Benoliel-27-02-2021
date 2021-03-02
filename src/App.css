@@ -22,4 +22,9 @@ a {
   text-decoration: inherit;
 }
 
+.sorry {
+  font-size: 50px;
+  color: red;
+}
+
 

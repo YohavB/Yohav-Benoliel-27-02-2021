@@ -27,7 +27,13 @@ function SearchBar(props) {
     } else {
       getCurrentWeather();
     }
+   
   }, []);
+
+  useEffect(() => {
+    console.log(error)
+  
+  }, [error])
 
   useEffect(() => {
     getCurrentWeather();
@@ -62,6 +68,7 @@ function SearchBar(props) {
     if (!error) {
       try {
         const res = await getCurrentWeatherAPI(props.townID);
+        console.log(res);
         if (res.status === 200) {
           props.setWeatherData(res.data[0]);
         } else {
@@ -77,7 +84,7 @@ function SearchBar(props) {
   async function getPositionWeather() {
     try {
       const res = await getWeatherByPositionAPI(lat, lon);
-
+      console.log(res);
       if (res.status === 200) {
         props.setTownID(res.data.Key);
         props.setTownName(
