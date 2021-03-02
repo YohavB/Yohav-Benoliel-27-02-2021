@@ -66,12 +66,7 @@ function Home(props) {
     }
   };
   if ((!lat || !lon) && !props.townID) {
-    return (
-      <div className="sorry">
-        Sorry, but it's seems like the allowed number of requests has been
-        exceeded. Try tomorrow.
-      </div>
-    );
+    return null;
   }
   return (
     <div
