@@ -5,8 +5,8 @@
 }
 
 .fav-btn {
-  border: 1px solid rgb(243, 124, 144);
   position: absolute;
+  height: 20px;
   right: 10%;
   margin-top: 10px;
   cursor: pointer;
@@ -15,10 +15,9 @@
 @media only screen and (max-width: 768px) {
   .fav-btn {
     right: 10px;
-    cursor: pointer;
-    background-color: violet;
   }
 }
+
 .location {
   color: #fff;
   font-size: clamp(30px, 6vw, 70px);

@@ -3,8 +3,8 @@ import reducerSettings from "./settings";
 import reducerData from "./data";
 
 const reducers = combineReducers({
-	reducerData,
-	reducerSettings,
+  reducerData,
+  reducerSettings,
 });
 
 export default reducers;

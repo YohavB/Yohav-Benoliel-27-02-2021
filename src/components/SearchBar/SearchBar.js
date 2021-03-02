@@ -1,19 +1,22 @@
-import axios from "axios";
-import _ from "lodash";
 import React, { useEffect, useState } from "react";
+import _ from "lodash";
+
+import { connect } from "react-redux";
+import { setTownName, setWeatherData } from "../../actions/data";
+import { setTownID } from "../../actions/data";
+import { getMetric } from "../../selectors/settings";
+import { getTownID } from "../../selectors/data";
+
+import {
+  autocompleteAPI,
+  getCurrentWeatherAPI,
+  getWeatherByPositionAPI,
+} from "../api/wheaterApi";
 
 import "./SearchBar.css";
 
-import {setTownName, setWeatherData} from "../actions/data"
-import { getMetric } from "../selectors/settings";
-import { getTownID } from "../selectors/data";
-import { setTownID } from "../actions/data";
-import { connect } from "react-redux";
-import { api } from "../api/api";
-import {autocompleteAPI, getCurrentWeatherAPI, getWeatherByPositionAPI} from "../api/wheaterApi"
-
 function SearchBar(props) {
-	const {lat, lon, townID, setLat, setLon} = props
+  const { lat, lon, townID, setLat, setLon } = props;
   const [query, setQuery] = useState("");
   const [error, setError] = useState("");
   const [autoCompletion, setAutoCompletion] = useState([]);
@@ -22,21 +25,21 @@ function SearchBar(props) {
     if (lat && lon) {
       getPositionWeather();
     } else {
-	    getCurrentWeather()
+      getCurrentWeather();
     }
   }, []);
 
   useEffect(() => {
-	  getCurrentWeather()
-	  setLat(null)
-	  setLon(null)
+    getCurrentWeather();
+    setLat(null);
+    setLon(null);
   }, [townID]);
 
   useEffect(() => {
     query && validateQuery();
     if (!error && query) {
-	    // _.debounce(autocomplete, 500); TODO s'occuper de ca
-	    autocomplete()
+      // _.debounce(autocomplete, 500);
+      autocomplete();
     }
   }, [query]);
 
@@ -49,13 +52,8 @@ function SearchBar(props) {
   };
 
   async function autocomplete() {
-  	console.log("autocomplete")
     try {
-      const res = await autocompleteAPI(query)
-
-      console.log(res.data);
-      console.log(res.status);
-      console.log(res.statusText);
+      const res = await autocompleteAPI(query);
       setAutoCompletion(res.data);
     } catch (e) {}
   }
@@ -63,22 +61,15 @@ function SearchBar(props) {
   async function getCurrentWeather() {
     if (!error) {
       try {
-        const res = await getCurrentWeatherAPI(props.townID)
-
-        console.log(res.data);
-        console.log(res.status);
-        console.log(res.statusText);
+        const res = await getCurrentWeatherAPI(props.townID);
         if (res.status === 200) {
           props.setWeatherData(res.data[0]);
-          // props.setTownName(res.data.LocalizedName) //
         } else {
           setError("An Error has occured");
         }
       } catch (e) {
         setError(`An Error has occured, ${e}`);
       }
-    // } else if (!error && !query) {
-    //   setError("The Search Field is Empty!");
     }
     setQuery("");
   }
@@ -86,12 +77,12 @@ function SearchBar(props) {
   async function getPositionWeather() {
     try {
       const res = await getWeatherByPositionAPI(lat, lon);
-      console.log(res.data);
-      console.log(res.status);
-      console.log(res.statusText);
+
       if (res.status === 200) {
         props.setTownID(res.data.Key);
-        props.setTownName(`${res.data.LocalizedName}, ${res.data.Country.LocalizedName}`)
+        props.setTownName(
+          `${res.data.LocalizedName}, ${res.data.Country.LocalizedName}`
+        );
         getCurrentWeather();
       } else {
         setError("An Error has occured");
@@ -151,7 +142,7 @@ const mapStateToProps = (state) => {
 const mapDispatchToProps = {
   setWeatherData,
   setTownID,
-	setTownName,
+  setTownName,
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(SearchBar);

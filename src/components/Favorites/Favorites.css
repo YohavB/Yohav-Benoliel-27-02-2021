@@ -3,7 +3,6 @@
   flex-wrap: wrap;
   justify-content: space-around;
   align-content: flex-start;
-
   -webkit-background-size: cover;
   -moz-background-size: cover;
   -o-background-size: cover;
@@ -11,3 +10,10 @@
   min-height: calc(100% - 50px);
   transition: all 0.5s ease-in-out;
 }
+
+
+@media only screen and (max-width: 768px) {
+ .favorite-card{
+   min-height: 100%;
+ }
+  }

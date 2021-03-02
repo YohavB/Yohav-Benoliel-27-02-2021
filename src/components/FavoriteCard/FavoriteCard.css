@@ -22,12 +22,14 @@
   box-shadow: 20px 7px 35px -5px rgba(0, 0, 0, 0.75);
 }
 
-.favbtn {
+
+.delete-icon {
   position: absolute;
   right: 10px;
-  margin-top: 10px;
+  bottom: 15px;
   cursor: pointer;
   z-index: 2;
+  height: 20px;
 }
 
 .location.fav {

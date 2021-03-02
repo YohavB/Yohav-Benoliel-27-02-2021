@@ -1,26 +1,34 @@
 import React, { useState, useEffect } from "react";
-import _ from "lodash"
 import Moment from "react-moment";
+import _ from "lodash";
+
 import { connect } from "react-redux";
-import {getFavorites, getTownID, getTownName, getWeatherData} from "../selectors/data"
-import { getMetric } from "../selectors/settings";
-import {removeFavorite, setFavorite} from "../actions/data"
+import {
+  getFavorites,
+  getTownID,
+  getTownName,
+  getWeatherData,
+} from "../../selectors/data";
+import { getMetric } from "../../selectors/settings";
+import { removeFavorite, setFavorite } from "../../actions/data";
 
 import "./DailyWeather.css";
+import star_regular from "../assets/star-regular.svg";
+import star_solid from "../assets/star-solid.svg";
 
 function DailyWeather(props) {
-	const {weatherData, townName, townID, favorites} = props
+  const { weatherData, townName, townID, favorites } = props;
   const [isFavorite, setIsFavorite] = useState(false);
 
-	useEffect(() => {
-		const isFav = favorites.find(item => item.townID === townID)
-		setIsFavorite(!!isFav)
-	}, [townID])
+  useEffect(() => {
+    const isFav = favorites.find((item) => item.townID === townID);
+    setIsFavorite(!!isFav);
+  }, [townID]);
 
   const toggleFavorite = () => {
     const { setFavorite, removeFavorite } = props;
     if (!isFavorite) {
-      setFavorite({townID, townName});
+      setFavorite({ townID, townName });
     } else {
       removeFavorite(townID);
     }
@@ -32,37 +40,32 @@ function DailyWeather(props) {
   };
 
   const unit = props.metric ? "Metric" : "Imperial";
-	if (_.isEmpty(weatherData)) {
-		return null
-	}
+  if (_.isEmpty(weatherData)) {
+    return null;
+  }
   return (
     <div>
       <div className="daily-wrapper">
-            <div>
-              <div className="location-box">
-                <div className="fav-btn">
-                  {" "}
-                  <input
-                    type="checkbox"
-                    checked={isFavorite}
-                    onChange={toggleFavorite}
-                  />
-                </div>
-                <div className="location">{townName}</div>
-                <div className="date">
-                  {" "}
-                  <Moment format="dddd D MMMM  yyyy">
-                    {weatherData.LocalObservationDateTime}
-                  </Moment>{" "}
-                </div>
-              </div>
-              <div className="weather-box">
-                <div className="temp">
-	                {weatherData.Temperature[unit].Value} {weatherData.Temperature[unit].Unit}
-                </div>
-                <div className="weather">{weatherData.WeatherText}</div>
-              </div>
+        <div>
+          <div className="location-box">
+          
+            <img className="fav-btn" src={isFavorite ? star_solid :star_regular} alt="favbtn" onClick={toggleFavorite}/>
+            <div className="location">{townName}</div>
+            <div className="date">
+              {" "}
+              <Moment format="dddd D MMMM  yyyy">
+                {weatherData.LocalObservationDateTime}
+              </Moment>{" "}
             </div>
+          </div>
+          <div className="weather-box">
+            <div className="temp">
+              {weatherData.Temperature[unit].Value}{" "}
+              {weatherData.Temperature[unit].Unit}
+            </div>
+            <div className="weather">{weatherData.WeatherText}</div>
+          </div>
+        </div>
       </div>
     </div>
   );
@@ -79,7 +82,8 @@ const mapStateToProps = (state) => {
 };
 
 const mapDispatchToProps = {
-  setFavorite, removeFavorite,
+  setFavorite,
+  removeFavorite,
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(DailyWeather);

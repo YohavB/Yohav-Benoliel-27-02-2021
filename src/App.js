@@ -1,25 +1,23 @@
-import React, {useEffect} from "react"
-import "./App.css";
-
+import React from "react";
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
+
 import Home from "./components/Home";
 import Favorites from "./components/Favorites/Favorites";
 import Header from "./components/Header/Header";
 
-import {connect, Provider} from "react-redux"
+import reducers from "./reducers";
+import { Provider } from "react-redux";
 import { createStore } from "redux";
-import reducers from "./components/reducers";
-import {getFavorites, getTownID, getWeatherData} from "./components/selectors/data"
-import {populateFavorites} from "./components/actions/data"
+
+import "./App.css";
 
 const store = createStore(
   reducers,
   window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__()
 );
 
-
 function App() {
-	return (
+  return (
     <Provider store={store}>
       <div className="App">
         <Router>

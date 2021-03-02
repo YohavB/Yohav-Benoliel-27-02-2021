@@ -1,0 +1,105 @@
+
+.header {
+    height: 50px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: #ffe53b;
+    background-image: linear-gradient(180deg, #ffe53b 0%, #ff2525 74%);
+  }
+  
+  .header.dark {
+    background-color: #21d4fd;
+    background-image: linear-gradient(180deg, #0f85a0 0%, #5c0c81 100%);
+    color: aliceblue;
+  }
+  
+  .header-title {
+    display: flex;
+    padding-left: 10px;
+    font-size: 30px;
+  }
+  
+  .toggle-nav {
+    display: none;
+    transition: all 0.5s ease-in-out;
+  }
+  
+  .navlink {
+    width: 200px;
+    display: flex;
+    justify-content: space-around;
+    flex-direction: row;
+    flex-wrap: wrap;
+  }
+  
+  .btn-tab {
+    width: 50%;
+    margin-left: auto;
+    margin-right: auto;
+  }
+  
+  .current-tab {
+    font-weight: bold;
+    background-color: #ffe53b;
+    border-radius: 6px;
+    width: 50%;
+    margin-left: auto;
+    margin-right: auto;
+  }
+  
+  .current-tab.dark {
+    background-color: #5c0c81;
+  }
+  
+  @media only screen and (max-width: 768px) {
+    .header {
+      height: 40%;
+      min-height: 250px;
+      left: -150px;
+      width: 150px;
+      position: fixed;
+      border-right: none;
+      right: inherit;
+      flex-direction: column;
+      justify-content: space-around;
+      z-index: 3;
+      transition: all 0.5s ease-in-out;
+    }
+  
+    .header.open {
+      left: 0;
+    }
+  
+    .toggle-nav {
+      display: inherit;
+      position: absolute;
+      right: -28px;
+      top: 0;
+      border-radius: 0 5px 5px 0;
+      background-color: #ffe53b;
+      background-image: linear-gradient(180deg, #ffe53b 0%, #ffca38 74%);
+      color: #fff;
+      cursor: pointer;
+      padding: 5px;
+      transition: all 0.5s ease-in-out;
+    }
+  
+    .toggle-nav.dark {
+      background-color: #0f85a0;
+      background-image: linear-gradient(180deg, #0f85a0 0%, #17799d 100%);
+    }
+  
+    .menu-icon {
+      height: 20px;
+    }
+  
+    .navlink {
+      flex-direction: column;
+      width: 100%;
+      height: 70px;
+    }
+    .current-tab {
+      width: 70%;
+    }
+  }

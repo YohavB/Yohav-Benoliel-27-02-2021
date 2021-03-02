@@ -1,18 +1,13 @@
 import React, { useEffect, useState } from "react";
-import { getFavorites } from "../selectors/data";
-import { connect } from "react-redux";
 import FavoriteCard from "../FavoriteCard/FavoriteCard";
-import "./Favorites.css";
-import { getTheme } from "../selectors/settings";
 
+import { connect } from "react-redux";
+import { getFavorites } from "../../selectors/data";
+import { getTheme } from "../../selectors/settings";
+
+import "./Favorites.css";
 import day from "../assets/day-favbg.jpg";
 import night from "../assets/night-favbg.jpg";
-
-// const data = [
-//   { favoriteTownID: 215854, favoriteTownName: "Tel Aviv" },
-//   { favoriteTownID: 215415, favoriteTownName: "Tel Aviv" },
-//   { favoriteTownID: 515484, favoriteTownName: "Tel Aviv" },
-// ];
 
 function Favorites(props) {
   const [favBg, setFavBg] = useState(day);
@@ -32,8 +27,7 @@ function Favorites(props) {
   return (
     <div
       className="favorite-card"
-      style={{ backgroundImage:`url(${favBg})`,
-      transition: "all 1s ease-in"}}
+      style={{ backgroundImage: `url(${favBg})`, transition: "all 1s ease-in" }}
     >
       {props.favorites.map((item) => (
         <FavoriteCard

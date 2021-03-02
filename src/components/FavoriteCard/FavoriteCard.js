@@ -1,14 +1,15 @@
-import axios from "axios";
 import React, { useEffect, useState } from "react";
 import Moment from "react-moment";
-import { connect } from "react-redux";
-import { getMetric } from "../selectors/settings";
-import "./FavoriteCard.css";
-import {removeFavorite, setTownID, setTownName} from "../actions/data"
 import { Link } from "react-router-dom";
 
-import { api } from "../api/api";
-import {getCurrentWeatherAPI} from "../api/wheaterApi"
+import { connect } from "react-redux";
+import { getMetric } from "../../selectors/settings";
+import { removeFavorite, setTownID, setTownName } from "../../actions/data";
+
+import { getCurrentWeatherAPI } from "../api/wheaterApi";
+
+import "./FavoriteCard.css";
+import delete_icon from "../assets/delete.svg";
 
 function FavoriteCard(props) {
   const [favoriteWeatherData, setFavoriteWeatherData] = useState([]);
@@ -20,10 +21,7 @@ function FavoriteCard(props) {
 
   async function getCurrentWeather() {
     try {
-      const res = await getCurrentWeatherAPI(props.favoriteTownID)
-      console.log(res.data);
-      console.log(res.status);
-      console.log(res.statusText);
+      const res = await getCurrentWeatherAPI(props.favoriteTownID);
       if (res.status === 200) {
         setFavoriteWeatherData(res.data);
         setLoader(false);
@@ -36,11 +34,11 @@ function FavoriteCard(props) {
   }
 
   const setCurrentTown = () => {
-	  props.setTownID(props.favoriteTownID)
-	  props.setTownName(props.favoriteTownName)
-  }
+    props.setTownID(props.favoriteTownID);
+    props.setTownName(props.favoriteTownName);
+  };
 
-  const unit = !props.metric ? "Metric" : "Imperial";
+  const unit = props.metric ? "Metric" : "Imperial";
 
   return (
     <div className="wrapper">
@@ -48,9 +46,13 @@ function FavoriteCard(props) {
         <div> LOADING </div>
       ) : (
         <div className="card">
-          <button className="favbtn" onClick={() => props.removeFavorite(props.favoriteTownID)}>
-            FAV
-          </button>
+          <img
+            className="delete-icon"
+            src={delete_icon}
+            alt="delete"
+            onClick={() => props.removeFavorite(props.favoriteTownID)}
+          />
+
           <Link to="/" onClick={setCurrentTown}>
             <div className="location fav">{props.favoriteTownName}</div>
             <div className="date fav">

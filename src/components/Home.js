@@ -1,18 +1,18 @@
 import React, { useEffect, useState } from "react";
+
+import Forecast from "./Forecast/Forecast";
+import DailyWeather from "./DailyWeather/DailyWeather";
+import SearchBar from "./SearchBar/SearchBar";
+
+import { connect } from "react-redux";
+import { getTownID, getWeatherData } from "../selectors/data";
+
 import clear from "./assets/clear.jpg";
 import clouds from "./assets/clouds.jpg";
 import rainy from "./assets/rainy.jpg";
 import snow from "./assets/snow.jpg";
 import storm from "./assets/storm.jpg";
 import sun from "./assets/sun.jpg";
-
-import {getFavorites, getTownID, getWeatherData} from "./selectors/data"
-import {populateFavorites, setFavorite} from "./actions/data"
-import { connect } from "react-redux";
-
-import Forecast from "./Forecast/Forecast";
-import DailyWeather from "./DailyWeather/DailyWeather";
-import SearchBar from "./SearchBar/SearchBar";
 
 function Home(props) {
   const [mainBg, setMainBg] = useState(clear);
@@ -21,7 +21,7 @@ function Home(props) {
   const weatherNo = props.weatherData.WeatherIcon;
 
   useEffect(() => {
-	  getLatitudeLongitude();
+    getLatitudeLongitude();
   }, []);
 
   useEffect(() => {
@@ -29,29 +29,25 @@ function Home(props) {
   }, [weatherNo]);
 
   function getLatitudeLongitude() {
-	  var options = {
-		  enableHighAccuracy: true,
+    var options = {
+      enableHighAccuracy: true,
+      timeout: 0,
+      maximumAge: 0,
+    };
 
+    function success(pos) {
+      const lat = pos.coords.latitude;
+      const lon = pos.coords.longitude;
+      setLat(lat);
+      setLon(lon);
+    }
 
-		  
-		  timeout: 10,
-		  maximumAge: 0,
-	  };
+    function error(err) {
+      setLat(32.0833);
+      setLon(34.8000);
+    }
 
-	  function success(pos) {
-		  const lat = pos.coords.latitude;
-		  const lon = pos.coords.longitude;
-		  setLat(lat);
-		  setLon(lon);
-	  }
-
-	  function error(err) {
-		  console.warn(`ERROR(${err.code}): ${err.message}`);
-		  setLat(32.0853);
-		  setLon(34.7818);
-	  }
-
-	  navigator.geolocation.getCurrentPosition(success, error, options);
+    navigator.geolocation.getCurrentPosition(success, error, options);
   }
 
   const bgSwitch = () => {
@@ -69,9 +65,9 @@ function Home(props) {
       setMainBg(clear);
     }
   };
-if ((!lat || !lon) && !props.townID) {
-	return null;
-}
+  if ((!lat || !lon) && !props.townID) {
+    return null;
+  }
   return (
     <div
       className="main"
@@ -90,7 +86,7 @@ if ((!lat || !lon) && !props.townID) {
 const mapStateToProps = (state) => {
   return {
     weatherData: getWeatherData(state),
-	  townID: getTownID(state),
+    townID: getTownID(state),
   };
 };
 
