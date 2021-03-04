@@ -10,6 +10,7 @@ import { getCurrentWeatherAPI } from "../api/wheaterApi";
 
 import "./FavoriteCard.css";
 import delete_icon from "../assets/delete.svg";
+import NewLoader from "../Loader/Loader";
 
 function FavoriteCard(props) {
   const [favoriteWeatherData, setFavoriteWeatherData] = useState([]);
@@ -43,7 +44,9 @@ function FavoriteCard(props) {
   return (
     <div className="wrapper">
       {loader ? (
-        <div> LOADING </div>
+        <div>
+          <NewLoader type="TailSpin" color="#2196f3" width={50} height={50} />
+        </div>
       ) : (
         <div className="card">
           <img

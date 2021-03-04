@@ -13,6 +13,7 @@ import rainy from "./assets/rainy.jpg";
 import snow from "./assets/snow.jpg";
 import storm from "./assets/storm.jpg";
 import sun from "./assets/sun.jpg";
+import NewLoader from "./Loader/Loader";
 
 function Home(props) {
   const [mainBg, setMainBg] = useState(clear);
@@ -31,7 +32,7 @@ function Home(props) {
   function getLatitudeLongitude() {
     var options = {
       enableHighAccuracy: true,
-      timeout: 0,
+      timeout: 500,
       maximumAge: 0,
     };
 
@@ -66,7 +67,11 @@ function Home(props) {
     }
   };
   if ((!lat || !lon) && !props.townID) {
-    return null;
+    return (
+      <div className="main loading">
+        <NewLoader type="TailSpin" color="#2196f3" width={150} height={150} />
+      </div>
+    );
   }
   return (
     <div
